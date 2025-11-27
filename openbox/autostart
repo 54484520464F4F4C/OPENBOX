@@ -1,0 +1,31 @@
+
+#!/usr/bin/env bash
+# Minimal Openbox autostart
+
+# compositor (optional)
+# picom --experimental-backends &
+
+# services
+dunst -config ~/.config/dunst/dunstrc &
+udiskie --tray --notify &
+
+# keyboard repeat
+xset r rate 250 30
+
+# mouse – linear, sensible sensitivity
+MOUSE_ID=$(xinput list | grep -i 'mouse\|touchpad' | grep -o 'id=[0-9]*' | cut -d= -f2 | head -n1)
+xinput --set-prop "$MOUSE_ID" "Device Accel Profile" -1
+xinput --set-prop "$MOUSE_ID" "Device Accel Constant Deceleration" 1
+xinput --set-prop "$MOUSE_ID" "Device Accel Velocity Scaling" 0.8
+
+# disable screen‑saver & DPMS
+xset s off -dpms
+
+# load clean black‑red Xresources (if present)
+[ -f "$HOME/.Xresources" ] && xrdb -merge "$HOME/.Xresources"
+
+# optional BlackArch wallpaper
+ feh --bg-scale /home/fool/black.png &
+
+disown
+
